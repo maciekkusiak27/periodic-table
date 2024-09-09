@@ -1,11 +1,11 @@
-@import './../../styles.scss';
+@import "./../../styles.scss";
 
 .table {
-  background-color: #ffffff;
+  background-color: $white-color;
 
   &__header-cell {
-    background-color: $primary-color;
-    color: #ffffff;
+    background-color: $primary-color !important;
+    color: $white-color;
   }
 
   &__edit-button {
@@ -16,7 +16,6 @@
     }
   }
 
-
   &__row {
     &:nth-child(even) {
       background-color: lighten($primary-color, 50%);
@@ -25,8 +24,7 @@
 }
 
 .filter {
-  margin-bottom: 16px;
-  line-height: 32px;
+  line-height: 2rem;
 
   &__form-field {
     width: 100%;

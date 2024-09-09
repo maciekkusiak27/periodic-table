@@ -18,8 +18,6 @@
     </div>
     <div mat-dialog-actions class="edit-dialog__actions">
         <button mat-button (click)="onNoClick()" class="edit-dialog__button edit-dialog__button--cancel">Cancel</button>
-        <button mat-button [mat-dialog-close]="data" class="edit-dialog__button edit-dialog__button--save">Save</button>
-      </div>
-      
-  </div>
-  
+        <button mat-button (click)="onSave()" [mat-dialog-close]="data" class="edit-dialog__button edit-dialog__button--save">Save</button>
+      </div>      
+

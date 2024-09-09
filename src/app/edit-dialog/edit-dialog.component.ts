@@ -32,7 +32,11 @@ export class EditDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: PeriodicElement
   ) {}
 
-  onNoClick(): void {
+  public onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  public onSave(): void {
+    this.dialogRef.close(this.data);
   }
 }
