@@ -1,0 +1,66 @@
+<div class="filter">
+  <mat-form-field appearance="fill" class="filter__form-field">
+    <input
+      matInput
+      (input)="applyFilter($event)"
+      placeholder="Filter"
+      class="filter__input"
+    />
+  </mat-form-field>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="table">
+  <ng-container matColumnDef="position">
+    <th mat-header-cell *matHeaderCellDef class="table__header-cell">No.</th>
+    <td mat-cell *matCellDef="let element" class="table__cell">
+      {{ element.position }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef class="table__header-cell">Name</th>
+    <td mat-cell *matCellDef="let element" class="table__cell">
+      {{ element.name }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="weight">
+    <th mat-header-cell *matHeaderCellDef class="table__header-cell">Weight</th>
+    <td mat-cell *matCellDef="let element" class="table__cell">
+      {{ element.weight }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="symbol">
+    <th mat-header-cell *matHeaderCellDef class="table__header-cell">Symbol</th>
+    <td mat-cell *matCellDef="let element" class="table__cell">
+      {{ element.symbol }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef class="table__header-cell">
+      Actions
+    </th>
+    <td mat-cell *matCellDef="let element" class="table__cell">
+      <button
+        mat-icon-button
+        (click)="edit(element)"
+        class="table__edit-button"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr
+    mat-header-row
+    *matHeaderRowDef="displayedColumns"
+    class="table__header-row"
+  ></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: displayedColumns"
+    class="table__row"
+  ></tr>
+</table>
