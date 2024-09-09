@@ -22,8 +22,11 @@ Jako bibliotekę do komponentów użyj https://material.angular.io/
 
 ## Uruchomienie
 git clone https://github.com/username/periodic-table-app.git
+
 cd periodic-table-app
+
 npm install
+
 ng serve
 
 aplikacja uruchomi się na http://localhost:4200/
