@@ -8,8 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
 import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
+import { RxState } from '@rx-angular/state';
 
 @Component({
   selector: 'app-periodic-table',
@@ -25,42 +25,65 @@ import { EditDialogComponent } from '../edit-dialog/edit-dialog.component';
   ],
   templateUrl: './periodic-table.component.html',
   styleUrls: ['./periodic-table.component.scss'],
+  providers: [RxState],
 })
 export class PeriodicTableComponent implements OnInit {
-  displayedColumns: string[] = [
+  public displayedColumns: string[] = [
     'position',
     'name',
     'weight',
     'symbol',
     'actions',
   ];
-  dataSource = new MatTableDataSource<PeriodicElement>();
+  public dataSource = new MatTableDataSource<PeriodicElement>();
 
-  filterValue: string = '';
-  timeout: ReturnType<typeof setTimeout> | null = null;
+  private _timeout: ReturnType<typeof setTimeout> | null = null;
 
-  private dataUrl =
+  private _dataUrl =
     'https://raw.githubusercontent.com/maciekkusiak27/periodic-table/main/src/app/data/data.json';
 
-  constructor(private http: HttpClient, public dialog: MatDialog) {}
+  constructor(
+    private http: HttpClient,
+    public dialog: MatDialog,
+    private rxState: RxState<{
+      data: PeriodicElement[];
+      originalData: PeriodicElement[];
+      filterValue: string;
+    }>
+  ) {}
 
   public ngOnInit() {
-    this._fetchData().subscribe((data) => {
-      this.dataSource.data = data;
+    this.rxState.set({ data: [], originalData: [], filterValue: '' });
+    this._loadData();
+
+    this.rxState.select('data').subscribe((filteredData) => {
+      this.dataSource.data = filteredData;
     });
   }
 
-  private _fetchData(): Observable<PeriodicElement[]> {
-    return this.http
-      .get<PeriodicElement[]>(this.dataUrl)
-      .pipe(map((data) => data));
+  private _loadData() {
+    this.rxState.connect(
+      this.http.get<PeriodicElement[]>(this._dataUrl),
+      (state, data) => ({
+        originalData: data,
+        data,
+      })
+    );
   }
 
   public applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    clearTimeout(this.timeout ?? undefined);
-    this.timeout = setTimeout(() => {
-      this.dataSource.filter = filterValue.trim().toLowerCase();
+    const filterValue = (event.target as HTMLInputElement).value
+      .trim()
+      .toLowerCase();
+
+    clearTimeout(this._timeout ?? undefined);
+    this._timeout = setTimeout(() => {
+      this.rxState.set(({ originalData }) => {
+        const filteredData = originalData.filter((element) =>
+          element.name.toLowerCase().includes(filterValue)
+        );
+        return { data: filteredData, filterValue };
+      });
     }, 2000);
   }
 
@@ -69,17 +92,24 @@ export class PeriodicTableComponent implements OnInit {
       width: '250px',
       data: { ...element },
     });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        const index = this.dataSource.data.findIndex(
-          (e) => e.position === result.position
-        );
-        if (index !== -1) {
-          this.dataSource.data[index] = result;
-          this.dataSource._updateChangeSubscription();
+  
+    this.rxState.hold(
+      dialogRef.afterClosed(),
+      (result) => {
+        if (result) {
+          this.rxState.set(({ originalData, filterValue }) => {
+            const updatedData = originalData.map((item) =>
+              item.position === result.position ? result : item
+            );
+  
+            const filteredData = updatedData.filter((item) =>
+              item.name.toLowerCase().includes(filterValue)
+            );
+  
+            return { data: filteredData, originalData: updatedData };
+          });
         }
       }
-    });
+    );
   }
 }
