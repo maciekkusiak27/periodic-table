@@ -1,23 +1,41 @@
 <div class="edit-dialog">
-    <h1 mat-dialog-title class="edit-dialog__title">Edit Element</h1>
-    <div mat-dialog-content class="edit-dialog__content">
-      <mat-form-field appearance="fill" class="edit-dialog__form-field">
-        <mat-label class="edit-dialog__label">Name</mat-label>
-        <input matInput [(ngModel)]="data.name" class="edit-dialog__input"/>
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill" class="edit-dialog__form-field">
-        <mat-label class="edit-dialog__label">Weight</mat-label>
-        <input matInput [(ngModel)]="data.weight" type="number" class="edit-dialog__input"/>
-      </mat-form-field>
-  
-      <mat-form-field appearance="fill" class="edit-dialog__form-field">
-        <mat-label class="edit-dialog__label">Symbol</mat-label>
-        <input matInput [(ngModel)]="data.symbol" class="edit-dialog__input"/>
-      </mat-form-field>
-    </div>
-    <div mat-dialog-actions class="edit-dialog__actions">
-        <button mat-button (click)="onNoClick()" class="edit-dialog__button edit-dialog__button--cancel">Cancel</button>
-        <button mat-button (click)="onSave()" [mat-dialog-close]="data" class="edit-dialog__button edit-dialog__button--save">Save</button>
-      </div>      
+  <h1 mat-dialog-title class="edit-dialog__title">Edit Element</h1>
+  <div mat-dialog-content class="edit-dialog__content">
+    <mat-form-field appearance="fill" class="edit-dialog__form-field">
+      <mat-label class="edit-dialog__label">Name</mat-label>
+      <input matInput [(ngModel)]="data.name" class="edit-dialog__input" />
+    </mat-form-field>
 
+    <mat-form-field appearance="fill" class="edit-dialog__form-field">
+      <mat-label class="edit-dialog__label">Weight</mat-label>
+      <input
+        matInput
+        [(ngModel)]="data.weight"
+        type="number"
+        class="edit-dialog__input"
+      />
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="edit-dialog__form-field">
+      <mat-label class="edit-dialog__label">Symbol</mat-label>
+      <input matInput [(ngModel)]="data.symbol" class="edit-dialog__input" />
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions class="edit-dialog__actions">
+    <button
+      mat-button
+      (click)="onNoClick()"
+      class="edit-dialog__button edit-dialog__button--cancel"
+    >
+      Cancel
+    </button>
+    <button
+      mat-button
+      (click)="onSave()"
+      [mat-dialog-close]="data"
+      class="edit-dialog__button edit-dialog__button--save"
+    >
+      Save
+    </button>
+  </div>
+</div>
